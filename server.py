@@ -87,7 +87,7 @@ def recibir():
 # CREAR SERVIDOR
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-servidor.bind((""localhost"", 5000))
+servidor.bind(("0.0.0.0", 5000))
 
 servidor.listen(5)
 
