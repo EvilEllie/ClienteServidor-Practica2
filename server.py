@@ -91,3 +91,10 @@ def recibir():
         hilo = threading.Thread(target=manejar_cliente, args=(cliente,))
         hilo.daemon = True
         hilo.start()
+
+
+servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+servidor.bind(("0.0.0.0", 5000))  # Escucha en todas las interfaces
+servidor.listen(5)                 # Hasta 5 conexiones simultáneas
+print("Servidor esperando conexiones...")
+recibir()
