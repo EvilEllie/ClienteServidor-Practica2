@@ -14,3 +14,11 @@ def broadcast(mensaje, cliente_actual=None):
                 cliente.send(mensaje)
             except:
                 pass
+
+def actualizar_usuarios():
+    lista = ",".join(usuarios)
+    for cliente in clientes:
+        try:
+            cliente.send(f"    USUARIOS: {lista}".encode())
+        except:
+            pass
