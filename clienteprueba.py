@@ -51,9 +51,7 @@ def recibir_mensajes():
             messagebox.showerror("Error", "Se perdió la conexión con el servidor")
             break
 
-# =====================================
-# FUNCION PARA ENVIAR MENSAJES
-# =====================================
+
 def enviar_mensaje(event=None):
     mensaje = entrada_mensaje.get()
     if mensaje:

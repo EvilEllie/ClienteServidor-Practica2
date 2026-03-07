@@ -46,9 +46,7 @@ def recibir_mensajes():
             messagebox.showerror("Error", "Se perdió la conexión con el servidor")
             break
 
-# =====================================
-# FUNCION PARA ENVIAR MENSAJES
-# =====================================
+
 def enviar_mensaje(event=None):
     mensaje = entrada_mensaje.get()
     if mensaje:
@@ -60,3 +58,50 @@ def enviar_mensaje(event=None):
             entrada_mensaje.delete(0, tk.END)
         except:
             messagebox.showerror("Error", "No se pudo enviar el mensaje")
+
+
+ventana_login = tk.Tk()
+ventana_login.title("Conectar al Chat")
+ventana_login.geometry("300x180")
+ventana_login.resizable(False, False)
+
+tk.Label(ventana_login, text="Nombre de usuario:").pack(pady=(20, 2))
+entrada_nombre = tk.Entry(ventana_login, width=30)
+entrada_nombre.pack()
+
+tk.Label(ventana_login, text="IP del servidor:").pack(pady=(10, 2))
+entrada_ip = tk.Entry(ventana_login, width=30)
+entrada_ip.insert(0, "192.168.1.78")  # IP por defecto
+entrada_ip.pack()
+
+nombre_usuario = ""
+conectado = False
+
+def intentar_conectar():
+    global nombre_usuario, conectado
+    nombre = entrada_nombre.get().strip()
+    ip = entrada_ip.get().strip()
+
+    if not nombre:
+        messagebox.showwarning("Aviso", "Ingresa un nombre de usuario")
+        return
+    if not ip:
+        messagebox.showwarning("Aviso", "Ingresa la IP del servidor")
+        return
+
+    try:
+        cliente.connect((ip, 5000))
+        cliente.send(nombre.encode())
+        nombre_usuario = nombre
+        conectado = True
+        ventana_login.destroy()
+    except:
+        messagebox.showerror("Error", "No se pudo conectar al servidor.\nVerifica la IP y que el servidor esté activo.")
+
+boton_conectar = tk.Button(ventana_login, text="Conectar", command=intentar_conectar)
+boton_conectar.pack(pady=15)
+
+ventana_login.mainloop()
+
+if not conectado:
+    exit()
