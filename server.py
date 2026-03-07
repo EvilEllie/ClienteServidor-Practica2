@@ -70,14 +70,14 @@ def recibir():
         usuarios.append(nombre)
         print(nombre, "se conectó")
 
-        # Enviar historial al nuevo cliente PRIMERO
+  
         for m in historial:
             try:
                 cliente.send(f"[HISTORIAL]{m}".encode())
             except:
                 pass
 
-        # Notificar a todos (incluyendo al nuevo cliente)
+
         notificacion = f"{nombre} se ha unido al chat".encode()
         for c in clientes:
             try:
@@ -85,7 +85,7 @@ def recibir():
             except:
                 pass
 
-        # Actualizar lista de usuarios para todos
+
         actualizar_usuarios()
 
         hilo = threading.Thread(target=manejar_cliente, args=(cliente,))
@@ -94,7 +94,7 @@ def recibir():
 
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-servidor.bind(("0.0.0.0", 5000))  # Escucha en todas las interfaces
-servidor.listen(5)                 # Hasta 5 conexiones simultáneas
+servidor.bind(("0.0.0.0", 5000))  
+servidor.listen(5)                 
 print("Servidor esperando conexiones...")
 recibir()
