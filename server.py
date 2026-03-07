@@ -22,3 +22,72 @@ def actualizar_usuarios():
             cliente.send(f"    USUARIOS: {lista}".encode())
         except:
             pass
+
+def manejar_cliente(cliente):
+    while True:
+        try:
+            mensaje = cliente.recv(1024)
+            if not mensaje:
+                break
+            texto = mensaje.decode()
+
+            # Guardar en historial CON salto de linea
+            historial.append(texto + "\n")
+            if len(historial) > 20:
+                historial.pop(0)
+
+            # Enviar a todos menos al remitente
+            broadcast(mensaje, cliente)
+        except:
+            break
+
+    if cliente in clientes:
+        index = clientes.index(cliente)
+        usuario = usuarios[index]
+        clientes.remove(cliente)
+        usuarios.remove(usuario)
+        print(usuario, "se desconectó")
+
+        # Notificación de salida
+        broadcast(f"{usuario} ha salido del chat".encode())
+        actualizar_usuarios()
+        cliente.close()
+
+
+
+def recibir():
+    while True:
+        cliente, direccion = servidor.accept()
+        print("Conectado con", direccion)
+
+        try:
+            nombre = cliente.recv(1024).decode()
+        except:
+            cliente.close()
+            continue
+
+        clientes.append(cliente)
+        usuarios.append(nombre)
+        print(nombre, "se conectó")
+
+        # Enviar historial al nuevo cliente PRIMERO
+        for m in historial:
+            try:
+                cliente.send(f"[HISTORIAL]{m}".encode())
+            except:
+                pass
+
+        # Notificar a todos (incluyendo al nuevo cliente)
+        notificacion = f"{nombre} se ha unido al chat".encode()
+        for c in clientes:
+            try:
+                c.send(notificacion)
+            except:
+                pass
+
+        # Actualizar lista de usuarios para todos
+        actualizar_usuarios()
+
+        hilo = threading.Thread(target=manejar_cliente, args=(cliente,))
+        hilo.daemon = True
+        hilo.start()
