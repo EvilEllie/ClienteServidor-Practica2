@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import scrolledtext
 
 # DATOS DEL SERVIDOR
-HOST = "192.168.1.247"
+HOST = "192.168.1.78"
 PUERTO = 5000
 
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
