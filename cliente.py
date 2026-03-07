@@ -111,11 +111,11 @@ ventana = tk.Tk()
 ventana.title(f"Chat - {nombre_usuario}")
 ventana.geometry("700x400")
 
-# FRAME PRINCIPAL
+
 frame = tk.Frame(ventana)
 frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-# AREA DE CHAT
+
 area_chat = scrolledtext.ScrolledText(frame)
 area_chat.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -124,16 +124,34 @@ area_chat.tag_config("otros", foreground="green")
 area_chat.tag_config("notificacion", foreground="gray", font=("Arial", 9, "italic"))
 area_chat.tag_config("historial", foreground="purple", font=("Arial", 9, "italic"))
 
-# PANEL LATERAL DE USUARIOS
+
 frame_usuarios = tk.Frame(frame)
 frame_usuarios.pack(side=tk.RIGHT, fill=tk.Y, padx=5)
 tk.Label(frame_usuarios, text="Usuarios Conectados").pack()
 lista_usuarios = tk.Listbox(frame_usuarios)
 lista_usuarios.pack(fill=tk.Y, expand=True)
 
-# ENTRADA DE TEXTO Y BOTON
+
 entrada_mensaje = tk.Entry(ventana, width=60)
 entrada_mensaje.pack(side=tk.LEFT, padx=10, pady=10, fill=tk.X, expand=True)
 entrada_mensaje.bind("<Return>", enviar_mensaje)  # Enter también envía
 boton_enviar = tk.Button(ventana, text="Enviar", command=enviar_mensaje)
 boton_enviar.pack(side=tk.LEFT, padx=5, pady=10)
+
+
+def cerrar():
+    try:
+        cliente.close()
+    except:
+        pass
+    ventana.destroy()
+
+ventana.protocol("WM_DELETE_WINDOW", cerrar)
+
+
+hilo_recibir = threading.Thread(target=recibir_mensajes)
+hilo_recibir.daemon = True
+hilo_recibir.start()
+
+
+ventana.mainloop()
