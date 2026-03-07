@@ -3,6 +3,21 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext
 
+# DATOS DEL SERVIDOR
+HOST = "127.0.0.1"
+PUERTO = 5000
+
+cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+def conectar():
+    try:
+        cliente.connect((HOST, PUERTO))
+        print("Conectado al servidor")
+    except:
+        print("No se pudo conectar al servidor")
+
+conectar()
+
 # CREAR VENTANA PRINCIPAL
 ventana = tk.Tk()
 ventana.title("Chat Cliente-Servidor")
