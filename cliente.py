@@ -108,7 +108,7 @@ if not conectado:
 
 
 ventana = tk.Tk()
-ventana.title(f"Chat - {nombre_usuario}")
+ventana.title(f"WASSAP 2002 - {nombre_usuario}")
 ventana.geometry("700x400")
 
 
